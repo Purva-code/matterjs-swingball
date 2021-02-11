@@ -19,7 +19,7 @@ var score = 0;
 var birdSelectSound,birdFlySound,pigSnortSound;
 
 function preload(){
-    backgroundImg = loadImage("sprites/skyBackground.jpg");
+    // backgroundImg = loadImage("sprites/skyBackground.jpg");
 }
 
 function setup(){
