@@ -19,7 +19,7 @@ var score = 0;
 var birdSelectSound,birdFlySound,pigSnortSound;
 
 function preload(){
-    // backgroundImg = loadImage("sprites/skyBackground.jpg");
+    
 }
 
 function setup(){
@@ -33,9 +33,7 @@ function setup(){
         options: {
             width: 800,
             height: 600,
-            showAngleIndicator: true,
-            // wireframes: false
-            // background: 'sprites/skyBackground.jpg'
+            showAngleIndicator: true
         }
     });
 
@@ -49,6 +47,37 @@ function setup(){
     var rows = 10,
         yy = 600 - 25 - 40 * rows;
     
+    var stack = Composites.stack(400, yy, 5, rows, 0, 0, function(x, y) {
+        return Bodies.rectangle(x, y, 40, 40);
+    });
+    var stack2 = Bodies.rectangle(500, 500, 40, 40, {
+        render:{
+                fillStyle: 'black',
+                strokeStyle: 'black',
+                lineWidth: 20,
+                 options: {
+              wireframes: false
+    }
+            }
+    });
+    
+    World.add(world, [
+        stack, stack2,
+        // walls
+        Bodies.rectangle(400, 0, 800, 50, { isStatic: true}),
+        Bodies.rectangle(400, 600, 800, 50, { isStatic: true, 
+            render:{
+                fillStyle: 'black',
+                strokeStyle: 'black',
+                lineWidth: 20,
+                 options: {
+              wireframes: false
+    }
+            }}),
+        Bodies.rectangle(400, 600, 800, 50, { isStatic: true }),
+        Bodies.rectangle(800, 300, 50, 600, { isStatic: true }),
+        Bodies.rectangle(0, 300, 50, 600, { isStatic: true })
+    ]);
         var ball = Bodies.circle(100, 400, 50, { density: 0.04, frictionAir: 0.005});
     
     World.add(world, ball);
@@ -62,7 +91,7 @@ function setup(){
         mouseConstraint = MouseConstraint.create(engine, {
             mouse: mouse,
             constraint: {
-                stiffness: 0.01,
+                stiffness: 0.2,
                 render: {
                     visible: false
                 }
@@ -91,6 +120,7 @@ function setup(){
             Matter.Runner.stop(runner);
         }
     };
+    
 };
 
 Example.wreckingBall.for = '>=0.14.2';
@@ -100,3 +130,39 @@ if (typeof module !== 'undefined') {
 }
    
 
+function draw(){
+    if(backgroundImg)
+        background(backgroundImg);
+    
+        noStroke();
+        textSize(35)
+        fill("white")
+        text("Score  " + score, width-300, 50)
+    
+    Engine.update(engine);
+    //strokeWeight(4);
+      
+}
+
+function mouseDragged(){
+   // if (gameState!=="launched"){
+        // birdSelectSound.play()
+        // Matter.Body.setPosition(bird.body, {x: mouseX , y: mouseY});
+    //}
+}
+
+
+function mouseReleased(){
+    // slingshot.fly();
+    // birdFlySound.play()
+    // gameState = "launched";
+   
+}
+
+function keyPressed(){
+    // if(keyCode === 32){
+    //     Matter.Body.setPosition(bird.body, {x: 200 , y: 200});
+    //     slingshot.attach(bird.body);
+    //    birdSelectSound.play()
+    // }
+}
