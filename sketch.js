@@ -19,11 +19,11 @@ var score = 0;
 var birdSelectSound,birdFlySound,pigSnortSound;
 
 function preload(){
-    
+    // backgroundImg = loadImage("sprites/skyBackground.jpg");
 }
 
 function setup(){
-
+// var canvas = createCanvas(1535,600);
     engine = Engine.create();
     world = engine.world;
     // create renderer
@@ -33,7 +33,8 @@ function setup(){
         options: {
             width: 800,
             height: 600,
-            showAngleIndicator: true
+            showAngleIndicator: true,
+            wireframes: false
         }
     });
 
@@ -43,8 +44,9 @@ function setup(){
     var runner = Runner.create();
     Runner.run(runner, engine);
 
+    
      // add bodies
-    var rows = 10,
+    var rows = 5,
         yy = 600 - 25 - 40 * rows;
     
     var stack = Composites.stack(400, yy, 5, rows, 0, 0, function(x, y) {
@@ -52,11 +54,19 @@ function setup(){
     });
     var stack2 = Bodies.rectangle(500, 500, 40, 40, {
         render:{
-                fillStyle: 'black',
-                strokeStyle: 'black',
+                fillStyle: 'green',
+                strokeStyle: 'darkgreen',
                 lineWidth: 20,
+                constraint: {
+                stiffness: 2,
+                render: {
+                    visible: true
+                }
+            },
                  options: {
-              wireframes: false
+              wireframes: false,
+
+
     }
             }
     });
@@ -65,21 +75,24 @@ function setup(){
         stack, stack2,
         // walls
         Bodies.rectangle(400, 0, 800, 50, { isStatic: true}),
-        Bodies.rectangle(400, 600, 800, 50, { isStatic: true, 
-            render:{
-                fillStyle: 'black',
-                strokeStyle: 'black',
-                lineWidth: 20,
-                 options: {
-              wireframes: false
-    }
-            }}),
+        
         Bodies.rectangle(400, 600, 800, 50, { isStatic: true }),
         Bodies.rectangle(800, 300, 50, 600, { isStatic: true }),
         Bodies.rectangle(0, 300, 50, 600, { isStatic: true })
     ]);
         var ball = Bodies.circle(100, 400, 50, { density: 0.04, frictionAir: 0.005});
-    
+        ball.frictionAir=2;
+        ball.restitution=1;
+            console.log(ball.angularVelocity)
+           if(Matter.SAT.collides(stack2, ball).collided){
+            // ball.fill="red";
+            stack2.render.visible= false;
+            // stack2.Visibility = false;
+        }
+        // if(ball.body.speed>10) 
+        // stack2.body.render.visible = false;
+        // stack.Visibility = false;
+        engine.timing.timeScale=0.5;
     World.add(world, ball);
     World.add(world, Constraint.create({
         pointA: { x: 300, y: 100 },
